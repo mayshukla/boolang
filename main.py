@@ -90,8 +90,6 @@ def p_expr(p):
     """expr : or
             | and
             | grouping
-            | VAR
-            | LIT
     """
     p[0] = p[1]
 
@@ -102,33 +100,42 @@ def p_or(p):
     p[0] = ExprOr(p[1], p[3])
 
 
-# Here we need a bunch of rules to catch every case since there is no
-# "and" token
+# We need to define 2 rules for "and" since there is no "and" token
+#
+# Otherwise we'd just go "and : expr AND expr"
 def p_and(p):
-    """and : VAR VAR
-           | VAR grouping
-           | grouping VAR
-           | grouping grouping
-           | and VAR
+    """and : grouping grouping
            | and grouping
     """
     p[0] = ExprAnd(p[1], p[2]) 
 
 
-def p_grouping(p):
+def p_paren_grouping(p):
     """grouping : LEFT_PAREN expr RIGHT_PAREN
     """
     p[0] = p[2]
 
 
+# We define grouping to include just VAR and LIT to make
+# the rule for "and" simpler
+#
+# This needs a separate function due to array index
+def p_grouping(p):
+    """grouping : VAR
+                | LIT
+    """
+    p[0] = p[1]
+
+
+#TODO: define p_error
+#TODO: deal with spaces
+
 yacc.yacc()
 
 
 def main():
-    #lex.input('01    10as dASDF+10')
-    #for tok in iter(lex.token, None):
-        #print(repr(tok.type), repr(tok.value))
     print(yacc.parse('(a+b+c)(as+c(a+s)+df)(a+c)'))
+    print(yacc.parse('0(z+b)+(ab+x(d))1'))
 
 
 if __name__=='__main__':
