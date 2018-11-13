@@ -2,8 +2,24 @@
 """
 
 
+class ExprUnary:
+    """ Base class for a unary expression
+    """
+    def __init__(self, value):
+        self.value = value
+    def __repr__(self):
+        return "ExprUnary({})".format(self.value)
+
+
+class ExprNot(ExprUnary):
+    """ Derived class for a unary not expression
+    """
+    def __repr__(self):
+        return "ExprNot({})".format(self.value)
+
+
 class ExprBinary:
-    """Base class for a binary expression
+    """ Base class for a binary expression
     """
     def __init__(self, left, right):
         self.left = left
@@ -13,14 +29,14 @@ class ExprBinary:
 
 
 class ExprOr(ExprBinary):
-    """Derived class for an or expression
+    """ Derived class for an or expression
     """
     def __repr__(self):
         return "ExprOr({}, {})".format(self.left, self.right)
 
 
 class ExprAnd(ExprBinary):
-    """Derived class for an and expression
+    """ Derived class for an and expression
     """
     def __repr__(self):
         return "ExprAnd({}, {})".format(self.left, self.right)

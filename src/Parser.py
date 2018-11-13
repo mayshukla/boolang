@@ -1,5 +1,5 @@
 from ply import lex, yacc
-from AST import ExprAnd, ExprOr
+from AST import ExprNot, ExprAnd, ExprOr
 
 class Parser:
     """ Base class for lexer/parser 
@@ -21,7 +21,7 @@ class BoolangParser(Parser):
 
     # Declare list of tokens for lex
     tokens = [
-        'SPACE',
+        'TICK',
         'LIT',
         'VAR',
         'PLUS',
@@ -37,6 +37,7 @@ class BoolangParser(Parser):
     #       regular expressions.
 
 
+    t_TICK = r"'"
     t_LIT = r'(0|1)'
     t_VAR = r'[a-zA-Z]'
     t_PLUS = r'\+'
@@ -95,6 +96,13 @@ class BoolangParser(Parser):
         """grouping : LEFT_PAREN expr RIGHT_PAREN
         """
         p[0] = p[2]
+
+
+    # Define unary negation (e.g. " x' ") as another type of grouping
+    def p_not(self, p):
+        """grouping : grouping TICK
+        """
+        p[0] = ExprNot(p[1])
 
 
     # We define grouping to include just VAR and LIT to make
