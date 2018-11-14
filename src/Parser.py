@@ -1,5 +1,7 @@
 from ply import lex, yacc
-from AST import ExprNot, ExprAnd, ExprOr
+from AST import *
+
+alpha = "abcdefghijklmnopqrstuvwxyz"
 
 class Parser:
     """ Base class for lexer/parser 
@@ -25,9 +27,28 @@ class BoolangParser(Parser):
         'LIT',
         'VAR',
         'PLUS',
+        #'COMMA',
         'LEFT_PAREN',
-        'RIGHT_PAREN'
+        'RIGHT_PAREN',
+        #'LEFT_BRACKET',
+        #'RIGHT_BRACKET',
+        'LEFT_BRACE',
+        'RIGHT_BRACE',
+
+        # for variable lists in function definitions and
+        # passing arguments in evalution statements
+        'LIST',
+
+        # generic identifier
+        'IDENTIFIER'
     ]
+
+    # Reserved keywords and their corresponding token types
+    reserved = {
+        r'\def':'DEF',
+        r'\truth':'TRUTH'
+    }
+    tokens = tokens + list(reserved.values())
 
 
     # Define each token 
@@ -41,8 +62,14 @@ class BoolangParser(Parser):
     t_LIT = r'(0|1)'
     t_VAR = r'[a-zA-Z]'
     t_PLUS = r'\+'
+    #t_COMMA = r'\,'
     t_LEFT_PAREN = r'\('
     t_RIGHT_PAREN = r'\)'
+    #t_LEFT_BRACKET = r'\['
+    #t_RIGHT_BRACKET = r'\]'
+    t_LEFT_BRACE = r'\{'
+    t_RIGHT_BRACE = r'\}'
+
 
     # String containing ignore characters
     #
@@ -51,8 +78,44 @@ class BoolangParser(Parser):
     t_ignore = ' \t'
 
 
+    # Handle indentifiers, including reserved keywords
+    #
+    # An identifier is a backslash followed by one or more letters or
+    # underscores
+    def t_IDENTIFIER(self, t):
+        r'\\[a-zA-Z_]+'
+
+        # Check if the identifier is a reserved keyword
+        #
+        # If not in reserved, it is just a generic identifier
+        t.type = self.reserved.get(t.value, 'IDENTIFIER')
+
+        # Strip leading backslash
+        t.value = t.value[1:]
+
+        return t
+
+
+    # Matches something like [x, y, z]
+    # store only a list ['x','y','z']
+    def t_LIST(self, t):
+        r'\[\s*([a-zA-Z])\s*(,\s*([a-zA-Z])\s*)*\]'
+
+        raw_list = t.value
+        t.value = []
+
+        # Extract only the contents of the list
+        # By this point, that should be any alphabetical or 0 or 1
+        for char in raw_list:
+            if char in alpha or char in '01':
+                t.value += char
+
+        return t
+
+
     def t_error(self, t):
-        """ Called when lex meets a token which doesn't match any defined rules
+        """ Called when lex meets a token which doesn't match any defined 
+            rules
         """
         raise TypeError('Error: unexpeced token "{}"'.format(t.value))
 
@@ -66,6 +129,21 @@ class BoolangParser(Parser):
     precedence = [
         ('left', 'PLUS')
     ]
+
+
+    # TODO: a statement can also be a truth statement
+    def p_stmt(self, p):
+        """stmt : def
+        """
+        p[0] = p[1]
+
+
+    def p_def(self, p):
+        """def : DEF IDENTIFIER LIST LEFT_BRACE expr RIGHT_BRACE
+        """
+        p[0] = StmtDef(identifier=p[2],
+                       variable_list=p[3],
+                       expr=p[5])
 
 
     def p_expr(self, p):
@@ -109,11 +187,14 @@ class BoolangParser(Parser):
     # the rule for "and" simpler
     #
     # This needs a separate function due to array index
-    def p_grouping(self, p):
+    def p_variable(self, p):
         """grouping : VAR
-                    | LIT
         """
-        p[0] = p[1]
+        p[0] = ExprVariable(p[1])
+    def p_literal(self, p):
+        """grouping : LIT
+        """
+        p[0] = ExprLiteral(p[1])
 
 
     # Handle syntax errors
@@ -123,6 +204,21 @@ class BoolangParser(Parser):
         else:
             raise Exception("Syntax error at EOF")
 
+
+    def print_tokens(self, text):
+       """ Only does the lexing part and prints the result. 
+           Useful for debugging only
+       """
+
+       lex.input(text)
+
+       while True:
+           tok = lex.token()
+           if not tok: 
+               break      # No more input
+           print(tok)
+
+       
 
     def parse(self, text):
         """ Parses text and returns AST
