@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Runs main python module
 # note: must first source setup.bash to add to PYTHONPATH
