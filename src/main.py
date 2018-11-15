@@ -1,23 +1,37 @@
+import sys
+
 from Parser import BoolangParser
 from Interpreter import Interpreter
 
+
+def repl():
+    parser = BoolangParser()
+    interpreter = Interpreter()
+
+    print('Welcome to the boolang REPL!')
+
+    while True:
+        line = input('> ')
+
+        program = parser.parse(line)
+        interpreter.interpret(program)
+
+
+def interpret_file(filename):
+    #TODO: this
+    pass
+
+
 def main():
-    boolang_parser = BoolangParser()
-    boolang_interpreter = Interpreter()
-    
-    #print(boolang_parser.parse('(a+b+c) (as+c(a+s)+df) (a+c)'))
-    #print(boolang_parser.parse('0(z + b) + (a b+x (d) )1'))
-    #print(boolang_parser.parse("x'y+(xy)''+(x+y)'"))
+    if len(sys.argv) == 1:
+        repl()
 
-    my_program = boolang_parser.parse(r"\def \f [x,y,z] {(x+z)'y+z}"
-                                  + r"\truth \f"
-                                  + r"\def \g [a,b] {a+b}"
-                                  + r"\truth \g")
+    elif len(sys.argv) == 2:
+        interpret_file(sys.argv[1])
 
-    boolang_interpreter.interpret(my_program)
-    
-    # syntax error
-    #print(boolang_parser.parse('x+'))
+    else:
+        print('Usage: boolang [source file]')
+
 
 
 if __name__=='__main__':

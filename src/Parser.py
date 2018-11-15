@@ -246,5 +246,8 @@ class BoolangParser(Parser):
     def parse(self, text):
         """ Parses text and returns AST in the form of a Program object
         """
+        # Reset the program
+        self.program = Program()
+
         yacc.parse(text)
         return self.program

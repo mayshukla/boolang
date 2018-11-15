@@ -63,4 +63,4 @@ class Function:
             print(', '.join(map(str, inputs)), end='')
             print(' => ', end='')
 
-            print(self.evaluate(inputs))
+            print(int(self.evaluate(inputs)))
