@@ -131,9 +131,24 @@ class BoolangParser(Parser):
     ]
 
 
-    # TODO: a statement can also be a truth statement
+    # This Program variable will store a flat list of all the statements
+    # in our program so they can be interpreted one by one later
+    program = Program()
+    def p_program(self, p):
+        """program : program stmt
+                   | stmt
+        """
+        if len(p) == 3:
+            # don't add p[1] because it needs to get parsed further
+            self.program.add_stmt(p[2])
+        elif len(p) == 2:
+            self.program.add_stmt(p[1])
+
+
+    #TODO: \eval statement
     def p_stmt(self, p):
         """stmt : def
+                | truth
         """
         p[0] = p[1]
 
@@ -144,6 +159,14 @@ class BoolangParser(Parser):
         p[0] = StmtDef(identifier=p[2],
                        variable_list=p[3],
                        expr=p[5])
+
+
+    #TODO: support TRUTH expr
+    # that will probably require automatic variable counting
+    def p_truth(self,p):
+        """truth : TRUTH IDENTIFIER
+        """
+        p[0] = StmtTruth(p[2])
 
 
     def p_expr(self, p):
@@ -221,6 +244,7 @@ class BoolangParser(Parser):
        
 
     def parse(self, text):
-        """ Parses text and returns AST
+        """ Parses text and returns AST in the form of a Program object
         """
-        return yacc.parse(text)
+        yacc.parse(text)
+        return self.program
