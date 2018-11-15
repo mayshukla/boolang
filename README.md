@@ -7,12 +7,20 @@ Boolang is implemented in python using [PLY](https://www.dabeaz.com/ply/) (Pytho
 Not to be confused with [boo-lang](https://github.com/boo-lang/boo)
 
 ## Instructions
+### Dependencies
+You will need python3 and the "ply" module. You can install "ply" from requirements.txt
+
 ### Setup
 
 Clone the repository and cd into it.
 ```bash
 git clone https://github.com/rpshukla/boolang.git
 cd boolang
+```
+
+Install dependecies:
+```bash
+pip install -r requirements.txt
 ```
 
 Source setup.bash. This will add src to PYTHONPATH and bin to PATH:
