@@ -1,3 +1,7 @@
+""" This is the main module for boolang
+"""
+
+
 import sys
 
 from Parser import BoolangParser

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# Runs main python module
+# note: must first source setup.bash to add to PYTHONPATH
+python3 -m boolang
