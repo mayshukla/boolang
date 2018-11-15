@@ -30,3 +30,18 @@ Once you have done the setup. You should be able to type "boolang" from any dire
 ```bash
 boolang filename
 ```
+
+## A Tour of the Syntax
+Define a function.
+
+Note: spaces and newlines are not significant.
+```
+\def \my_funct [x, y] {
+    x'y + xy'
+}
+```
+
+Print a truth table for my\_funct:
+```
+\truth \my_funct
+```
