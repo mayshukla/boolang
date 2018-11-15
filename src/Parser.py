@@ -75,7 +75,8 @@ class BoolangParser(Parser):
     #
     # note: in this case, a raw string is not used since we want an actual
     #       tab
-    t_ignore = ' \t'
+    #TODO: count newlines instead of just ignoring
+    t_ignore = ' \t\n'
 
 
     # Handle indentifiers, including reserved keywords

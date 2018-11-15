@@ -18,8 +18,20 @@ def repl():
 
 
 def interpret_file(filename):
-    #TODO: this
-    pass
+    parser = BoolangParser()
+    interpreter = Interpreter()
+
+    text = ''
+    try:
+        with open(filename) as f:
+            # read entire file
+            text = f.read()
+    except FileNotFoundError:
+        print('Error: file not found.')
+        sys.exit(1)
+
+    program = parser.parse(text)
+    interpreter.interpret(program)
 
 
 def main():
