@@ -12,3 +12,7 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null && pwd )"
 
 # Add src directory to PYTHONPATH so that python searches for modules there
 export PYTHONPATH=$PYTHONPATH:$DIR/src
+
+# Add bin directory to PATH so that the python module can be run in bash just
+# by typing "boolang"
+export PATH=$PATH:$DIR/bin
