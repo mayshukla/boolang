@@ -1,5 +1,6 @@
 from ply import lex, yacc
 from AST import *
+from BoolangError import BoolangParserError, BoolangSyntaxError
 
 alpha = "abcdefghijklmnopqrstuvwxyz"
 
@@ -118,7 +119,7 @@ class BoolangParser(Parser):
         """ Called when lex meets a token which doesn't match any defined 
             rules
         """
-        raise TypeError('Error: unexpeced token "{}"'.format(t.value))
+        raise BoolangParserError(t.value)
 
 
     # Define parser rules
@@ -224,9 +225,10 @@ class BoolangParser(Parser):
     # Handle syntax errors
     def p_error(self, p):
         if p:
-            raise Exception("Syntax error at '{}'".format(p.value))
+            raise BoolangSyntaxError(p.value)
         else:
-            raise Exception("Syntax error at EOF")
+            # Error is at end of file
+            raise BoolangSyntaxError('EOF')
 
 
     def print_tokens(self, text):

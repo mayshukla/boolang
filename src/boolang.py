@@ -6,6 +6,7 @@ import sys
 
 from Parser import BoolangParser
 from Interpreter import Interpreter
+from BoolangError import BoolangError
 
 
 def repl():
@@ -17,8 +18,11 @@ def repl():
     while True:
         line = input('> ')
 
-        program = parser.parse(line)
-        interpreter.interpret(program)
+        try:
+            program = parser.parse(line)
+            interpreter.interpret(program)
+        except BoolangError as error:
+            print(error.message)
 
 
 def interpret_file(filename):

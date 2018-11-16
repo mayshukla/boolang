@@ -1,3 +1,5 @@
+from BoolangError import BoolangRuntimeError
+
 class Environment:
     """ A class to store bindings of identifiers to values.
         Basically, a namespace.
@@ -24,6 +26,4 @@ class Environment:
         try:
             return self.mappings[identifier]
         except KeyError:
-            raise Exception('boolang error: variable "{}" not defined'
-                            .format(identifier))
-
+            raise BoolangRuntimeError('boolang error: variable "{}" not defined'.format(identifier))

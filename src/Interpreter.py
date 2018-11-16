@@ -1,6 +1,7 @@
 from AST import *
 from BoolangObjects import *
 from Environment import Environment
+from BoolangError import BoolangRuntimeError
 
 
 class Interpreter:
@@ -30,5 +31,5 @@ class Interpreter:
                 self.globalEnvironment.lookup(stmt.identifier).truth()
 
             else:
-                raise Exception("Interpreter doesn't support that type of"
-                                + "statement yet.")
+                raise BoolangRuntimeError("Interpreter doesn't support that"
+                                          + " type of statement yet.")
