@@ -18,6 +18,9 @@ def repl():
     while True:
         line = input('> ')
 
+        if line == 'exit':
+            sys.exit(0)
+
         try:
             program = parser.parse(line)
             interpreter.interpret(program)
