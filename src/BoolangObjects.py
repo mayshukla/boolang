@@ -4,6 +4,7 @@
 
 from AST import *
 from Environment import Environment
+from BoolangError import BoolangRuntimeError
 
 
 class Function:
@@ -34,9 +35,7 @@ class Function:
             TODO: this
         """
         if len(inputs) != len(self.variable_list):
-            raise Exception('Error: a function requires {} inputs but'
-                            + ' {} were supplied'
-                            .format(len(self.variable_list), len(inputs)))
+            raise BoolangRuntimeError('Error: a function requires {} inputs but {} were supplied'.format(len(self.variable_list), len(inputs)))
 
         # Create a temporary enviroment and store the inputs 
         environment = Environment()
