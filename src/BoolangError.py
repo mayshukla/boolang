@@ -1,13 +1,14 @@
 """ Custom error classes for boolang parser, syntax, runtime errors
 """
 
+
 class BoolangError(Exception):
     """ Base class for all boolang errors
     """
     pass
 
 
-class BoolangParserError(BoolangError):
+class BoolangLexerError(BoolangError):
     """ Exception for parser errors
     """
 

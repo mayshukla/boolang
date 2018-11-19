@@ -1,6 +1,6 @@
 from ply import lex, yacc
 from AST import *
-from BoolangError import BoolangParserError, BoolangSyntaxError
+from BoolangError import BoolangLexerError, BoolangSyntaxError
 
 alpha = "abcdefghijklmnopqrstuvwxyz"
 
@@ -119,7 +119,7 @@ class BoolangParser(Parser):
         """ Called when lex meets a token which doesn't match any defined 
             rules
         """
-        raise BoolangParserError(t.value)
+        raise BoolangLexerError(t.value)
 
 
     # Define parser rules
