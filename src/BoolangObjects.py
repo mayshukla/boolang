@@ -31,8 +31,6 @@ class Function:
 
             inputs: a list of boolean values to be substituted into the
                     function. Should be the correct size
-
-            TODO: this
         """
         if len(inputs) != len(self.variable_list):
             raise BoolangRuntimeError('Error: a function requires {} inputs but {} were supplied'.format(len(self.variable_list), len(inputs)))
